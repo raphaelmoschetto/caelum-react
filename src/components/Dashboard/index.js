@@ -4,7 +4,7 @@ import './dashboard.css'
 class Dashboard extends Component {
     render() {
         return (
-            <div className={`dashboard dashboard__${this.props.posicao}`}>
+            <div className={`dashboard${this.props.posicao ? ` dashboard__${this.props.posicao}` : ''}`}>
                 {this.props.children}
             </div>
         )

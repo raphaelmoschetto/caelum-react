@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import navMenuStyles from "./navMenu.module.css";
+import { Link } from 'react-router-dom';
 
 export default class NavMenu extends Component {
   render() {
@@ -13,9 +14,7 @@ export default class NavMenu extends Component {
             </a>
           </li>
           <li className={navMenuStyles.navMenu__item}>
-            <a className={navMenuStyles.navMenu__link} href="/">
-              Página Inicial
-            </a>
+            <Link to="/" className={navMenuStyles.navMenu__link}>Página Inicial</Link>
           </li>
           <li className={navMenuStyles.navMenu__item}>
             <a className={navMenuStyles.navMenu__link} href="/hashtags">

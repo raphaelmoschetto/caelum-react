@@ -8,7 +8,7 @@ class LoginPage extends Component {
     constructor() {
         super();
         this.state = {
-            loginError: false,
+            loginError: "",
         };
         this.nameRef = createRef();
         this.passwordRef = createRef();
@@ -16,7 +16,6 @@ class LoginPage extends Component {
 
     fazerLogin = infosDoEvento => {
         infosDoEvento.preventDefault();
-        console.log(infosDoEvento);
 
         const dadosDeLogin = {
             login: this.nameRef.current.value,
@@ -47,7 +46,11 @@ class LoginPage extends Component {
                     this.setState({
                         loginError: err.message,
                     }, () => {
-                        console.error(`[Erro ${err.status}]`, err.message);
+                        setTimeout(() => {
+                            this.setState({
+                                loginError: "",
+                            });
+                        }, 3000)
                     })
                 });
     }
@@ -85,9 +88,8 @@ class LoginPage extends Component {
                     </div>
                 </div>
             </Fragment>
-        )
+        );
     }
 }
 
-
-export default LoginPage
+export default LoginPage;

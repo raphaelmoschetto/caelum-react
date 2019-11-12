@@ -1,62 +1,57 @@
-import React, { Component, Fragment, createRef } from 'react';
+import React, { Component, Fragment } from 'react';
 import Cabecalho from '../../components/Cabecalho';
 import Widget from '../../components/Widget';
+import FormManager from '../../components/FormManager';
+import InputFormField from '../../components/InputFormField';
 
 import './loginPage.css'
+import { LoginService } from './loginService';
+import { NotificationContext } from '../../contexts/NotificationContext';
 
 class LoginPage extends Component {
     constructor() {
         super();
         this.state = {
-            loginError: "",
+            values: {
+                inputLogin: '',
+                inputPassword: '',
+            },
+            errors: {},
         };
-        this.nameRef = createRef();
-        this.passwordRef = createRef();
     }
 
-    fazerLogin = infosDoEvento => {
+    formValidations = values => {
+        const errors = {};
+        if (!values.inputLogin) {
+            errors.inputLogin = "Esse campo é obrigatório";
+        }
+        if (!values.inputPassword) {
+            errors.inputPassword = "Esse campo é obrigatório";
+        }
+        return errors;
+    }
+
+    fazerLogin = (infosDoEvento, values) => {
         infosDoEvento.preventDefault();
 
         const dadosDeLogin = {
-            login: this.nameRef.current.value,
-            senha: this.passwordRef.current.value,
+            login: values.inputLogin,
+            senha: values.inputPassword,
         };
 
-        fetch("https://twitelum-api.herokuapp.com/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dadosDeLogin)
-        }).then(async responseDoServer => {
-                if (!responseDoServer.ok) {
-                    const respostaDeErroDoServidor = await responseDoServer.json();
-                    const errorObj = Error(respostaDeErroDoServidor.message);
-                    errorObj.status = responseDoServer.status;
-                    throw errorObj;
-                }
-                return responseDoServer.json();
-            }).then(dadosDoServidorEmObj => {
-                    const { token } = dadosDoServidorEmObj;
-                    if (token) {
-                        localStorage.setItem("token", token);
-                        this.props.history.push("/");
-                    }
-                }).catch(err => {
-                    this.setState({
-                        loginError: err.message,
-                    }, () => {
-                        setTimeout(() => {
-                            this.setState({
-                                loginError: "",
-                            });
-                        }, 3000)
-                    })
-                });
+        LoginService.logar(dadosDeLogin)
+            .then(() => {
+                this.context.setMsg("Bem vindo ao Twitelum, login feito com sucesso!");
+                this.props.history.push("/");
+            })
+            .catch(err => {
+                this.context.setMsg(err.message);
+            });
     }
 
+    static contextType = NotificationContext;
+
     render() {
-        const { loginError } = this.state;
         return (
             <Fragment>
                 <Cabecalho />
@@ -64,26 +59,45 @@ class LoginPage extends Component {
                     <div className="container">
                         <Widget>
                             <h2 className="loginPage__title">Seja bem vindo!</h2>
-                            <form className="loginPage__form" onSubmit={(e) => this.fazerLogin(e)}>
-                                <div className="loginPage__inputWrap">
-                                    <label className="loginPage__label" htmlFor="login">Login</label> 
-                                    <input ref={this.nameRef} className="loginPage__input" type="text" id="login" name="login"/>
-                                </div>
-                                <div className="loginPage__inputWrap">
-                                    <label className="loginPage__label" htmlFor="senha">Senha</label> 
-                                    <input ref={this.passwordRef} className="loginPage__input" type="password" id="senha" name="senha"/>
-                                </div>
-                                {loginError && (
-                                    <div className="loginPage__errorBox">
-                                        {loginError}
-                                    </div>
+                            <FormManager
+                                initialValues={{ inputLogin: "", inputPassword: "" }}
+                                onFormValidation={this.formValidations}
+                            >
+                                {({
+                                    values,
+                                    errors,
+                                    touched,
+                                    onFormFieldChange,
+                                    onFormFieldBlur,
+                                }) => (
+                                    <form className="loginPage__form" onSubmit={(e) => this.fazerLogin(e, values)}>
+                                        <InputFormField
+                                            id="inputLogin"
+                                            label="Login: "
+                                            onChange={onFormFieldChange}
+                                            onBlur={onFormFieldBlur}
+                                            value={values}
+                                            error={errors}
+                                            touched={touched}
+                                        />
+                                        <InputFormField
+                                            id="inputPassword"
+                                            label="Senha: "
+                                            type="password"
+                                            onChange={onFormFieldChange}
+                                            onBlur={onFormFieldBlur}
+                                            value={values}
+                                            error={errors}
+                                            touched={touched}
+                                        />
+                                        <div className="loginPage__inputWrap">
+                                            <button className="loginPage__btnLogin" type="submit">
+                                                Logar
+                                            </button>
+                                        </div>
+                                    </form>
                                 )}
-                                <div className="loginPage__inputWrap">
-                                    <button className="loginPage__btnLogin" type="submit">
-                                        Logar
-                                    </button>
-                                </div>
-                            </form>
+                            </FormManager>
                         </Widget>
                     </div>
                 </div>

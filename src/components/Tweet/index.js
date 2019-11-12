@@ -3,15 +3,16 @@ import './tweet.css'
 
 class Tweet extends Component {
     render() {
+        const { usuario, texto } = this.props;
         return (
             <article className="tweet">
                 <div className="tweet__cabecalho">
-                    <img className="tweet__fotoUsuario" src="https://placehold.it/50x50" alt="" />
-                    <span className="tweet__nomeUsuario">Fulano de Tal</span>
-                    <a href="/"><span className="tweet__userName">@usuario</span></a>
+                    <img className="tweet__fotoUsuario" src={usuario.foto} alt={usuario.nome} />
+                    <span className="tweet__nomeUsuario">{usuario.nome}</span>
+                    <a href="/"><span className="tweet__userName">@{usuario.login}</span></a>
                 </div>
                 <p className="tweet__conteudo">
-                    {this.props.texto ? <span>{this.props.texto}</span> : ''}
+                    {texto ? <span>{texto}</span> : ''}
                 </p>
                 <footer className="tweet__footer">
                     <button className="btn btn--clean">

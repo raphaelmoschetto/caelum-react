@@ -13,11 +13,14 @@ import "./assets/css/novoTweet.css";
 import Routes from "./routes";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from 'react-router-dom';
+import { NotificationContextProvider } from './contexts/NotificationContext';
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Routes />
-    </ BrowserRouter>
+    <NotificationContextProvider>
+        <BrowserRouter>
+            <Routes />
+        </ BrowserRouter>
+    </NotificationContextProvider>
     , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

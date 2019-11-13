@@ -38,13 +38,13 @@ class Tweet extends Component {
     render() {
         const { user, text, likesUsers } = this.props;
         return (
-            <article className="tweet" onClick={this.handleClick}>
+            <article className="tweet">
                 <div className="tweet__cabecalho">
                     <img className="tweet__fotoUsuario" src={user.foto} alt={user.nome} />
                     <span className="tweet__nomeUsuario">{user.nome}</span>
                     <a href="/"><span className="tweet__userName">@{user.login}</span></a>
                 </div>
-                <p className="tweet__conteudo">
+                <p className="tweet__conteudo" onClick={this.handleClick}>
                     {text ? <span>{text}</span> : ''}
                 </p>
                 <footer className="tweet__footer">
@@ -70,7 +70,7 @@ class Tweet extends Component {
                     </button>
                 </footer>
                 {likesUsers && likesUsers.length ? (
-                        <div className="tweet__likes">{likesUsers.map(item => <div className="tweet__likes-user">{`${item.usuario.login}`}</div>)}</div>
+                        <div className="tweet__likes">{likesUsers.map(item => <div className="tweet__likes-user" key={item}>{`${item.usuario.login}`}</div>)}</div>
                     ) : ''}
             </article>
         );

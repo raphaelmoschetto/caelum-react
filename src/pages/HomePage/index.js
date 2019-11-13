@@ -69,8 +69,6 @@ class HomePage extends Component {
     openModal = tweet => {
         this.setState({
             activeTweetOnModal: tweet,
-        }, () => {
-            console.log(this.state.activeTweetOnModal);
         });
     }
 

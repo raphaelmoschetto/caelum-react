@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 
 export const NotificationContext = createContext({
     msg: '',
-    setMsg: (newMsg) => {},
+    setMsg: () => {},
 });
 
 export const NotificationContextProvider = ({ children }) => {

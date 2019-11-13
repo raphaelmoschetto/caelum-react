@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import Cabecalho from '../../components/Cabecalho';
+import Header from '../../components/Header';
 import Widget from '../../components/Widget';
 import FormManager from '../../components/FormManager';
 import InputFormField from '../../components/InputFormField';
@@ -31,15 +31,15 @@ class LoginPage extends Component {
         return errors;
     }
 
-    fazerLogin = (infosDoEvento, values) => {
-        infosDoEvento.preventDefault();
+    doLogin = (event, values) => {
+        event.preventDefault();
 
-        const dadosDeLogin = {
+        const loginData = {
             login: values.inputLogin,
             senha: values.inputPassword,
         };
 
-        LoginService.logar(dadosDeLogin)
+        LoginService.logar(loginData)
             .then(() => {
                 this.context.setMsg("Bem vindo ao Twitelum, login feito com sucesso!");
                 this.props.history.push("/");
@@ -54,7 +54,7 @@ class LoginPage extends Component {
     render() {
         return (
             <Fragment>
-                <Cabecalho />
+                <Header />
                 <div className="loginPage">
                     <div className="container">
                         <Widget>
@@ -70,7 +70,7 @@ class LoginPage extends Component {
                                     onFormFieldChange,
                                     onFormFieldBlur,
                                 }) => (
-                                    <form className="loginPage__form" onSubmit={(e) => this.fazerLogin(e, values)}>
+                                    <form className="loginPage__form" onSubmit={(e) => this.doLogin(e, values)}>
                                         <InputFormField
                                             id="inputLogin"
                                             label="Login: "

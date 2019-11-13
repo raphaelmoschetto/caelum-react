@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 
 // CSSs Globais
 import "./assets/css/reset.css";
-import "./assets/css/container.css";
 import "./assets/css/btn.css";
 import "./assets/css/icon.css";
 import "./assets/css/iconHeart.css";

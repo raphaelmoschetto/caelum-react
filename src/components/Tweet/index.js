@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NotificationContext } from '../../contexts/NotificationContext';
+import { TweetsService } from '../../services/TweetsService';
 import './tweet.css';
 
 class Tweet extends Component {
@@ -21,12 +22,7 @@ class Tweet extends Component {
             totalLikes: liked ? totalLikes - 1 : totalLikes + 1,
         });
 
-        fetch(`http://twitelum-api.herokuapp.com/tweets/${id}/like?X-AUTH-TOKEN=${localStorage.getItem('token')}`,
-        { method: 'POST' })
-            .then(response => response.json())
-            .then(response => {
-                this.context.setMsg(response.message);
-            });
+        TweetsService.like(id).then(response => console.log(response));
     }
 
     handleClick = () => {
